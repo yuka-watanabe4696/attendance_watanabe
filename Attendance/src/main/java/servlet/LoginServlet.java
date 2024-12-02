@@ -64,24 +64,27 @@ public class LoginServlet extends HttpServlet {
 			RequestDispatcher dispatch = request.getRequestDispatcher("confirmForm.jsp");
 			dispatch.forward(request, response);
 
-			if (userid == null || userid.isEmpty()) {
-				 request.setAttribute (" userid を入力してください。", null);
 				//リクエストスコープにエラーメッセージをセット
+				
+				request.setAttribute("error", "useridを入力してください。");
+				RequestDispatcher rd = request.getRequestDispatcher("error");
 				
 				RequestDispatcher dispatcher = request.getRequestDispatcher("top.jsp");
 				dispatcher.forward(request, response);
-				
+
 			}
 
 			System.out.println(returnmb.getuserId());
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO 自動生成された catch ブロック
-			e.printStackTrace();
+		}catch(ClassNotFoundException|
 
-			// フォワードでログイン画面に戻す
-			RequestDispatcher dispatcher = request.getRequestDispatcher("top.jsp");
-			dispatcher.forward(request, response);
+	SQLException e)
+	{
+		// TODO 自動生成された catch ブロック
+		e.printStackTrace();
 
-		}
+		// フォワードでログイン画面に戻す
+		RequestDispatcher dispatcher = request.getRequestDispatcher("top.jsp");
+		dispatcher.forward(request, response);
+
 	}
-}
+}}

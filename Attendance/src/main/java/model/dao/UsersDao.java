@@ -28,8 +28,8 @@ public class UsersDao {
 
 			if (rs.next()) {
 				// 見つかったアカウント情報を戻り値にセット
-				returnmb.setId(rs.getString("UserId"));
-				returnmb.setPasword(rs.getString("password"));
+				returnmb.setId(rs.getString("user_id"));
+				returnmb.setPasword(rs.getString("user_password"));
 
 			}
 
