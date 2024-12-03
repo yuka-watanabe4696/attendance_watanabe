@@ -13,7 +13,7 @@ public class UsersDao {
 	public MemberBean findAccount(MemberBean mb) throws ClassNotFoundException, SQLException {
 
 		// 戻り値の用意
-		MemberBean returnmb = new MemberBean();
+		MemberBean returnmb = null;
 
 		// データベースへ接続
 		try (Connection con = ConnectionManager.getConnection()) {
@@ -27,12 +27,16 @@ public class UsersDao {
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
+				returnmb = new MemberBean();
 				// 見つかったアカウント情報を戻り値にセット
 				returnmb.setId(rs.getString("user_id"));
 				returnmb.setPasword(rs.getString("user_password"));
 
+				//}else {//ユーザーが存在しないとき、falseを返す？
 			}
-
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 
 		return returnmb;
