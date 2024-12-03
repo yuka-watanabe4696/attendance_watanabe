@@ -100,8 +100,7 @@
 <!-- 社員ID -->
 <div class="form-group">
     <label for="userid">社員ID</label>
-    <input type="text" name="userid" id="userid">
-    <% 
+      <% 
         String userIdError = (String) request.getAttribute("userIdError");
         if (userIdError != null) { 
     %>
@@ -110,13 +109,14 @@
     <% 
         } 
     %>
+    <input type="text" name="userid" id="userid">
+  
 </div>
 
 <!-- パスワード -->
 <div class="form-group">
     <label for="password">パスワード</label>
-    <input type="password" name="password" id="password">
-    <% 
+     <% 
         String passwordError = (String) request.getAttribute("passwordError");
         if (passwordError != null) { 
     %>
@@ -125,6 +125,8 @@
     <% 
         } 
     %>
+    <input type="password" name="password" id="password">
+   
 </div>
             <!-- ログインボタンの右寄せ -->
             <div class="submit-container">
