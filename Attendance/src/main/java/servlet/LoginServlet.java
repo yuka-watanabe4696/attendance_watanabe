@@ -26,7 +26,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public LoginServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -35,7 +34,6 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.getRequestDispatcher("top.jsp").forward(request, response);
-		// TODO Auto-generated method stub
 	}
 
 	/**
@@ -47,15 +45,15 @@ public class LoginServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 		// ユーザーから送信されたユーザーIDとパスワードを取得する。
-		String userid = request.getParameter("userid");
+		Integer userid = Integer.parseInt(request.getParameter("userid"));
 		String password = request.getParameter("password");
 
 		// usersdaoインスタンス化
 		UsersDao usersdao = new UsersDao();
 		MemberBean mb = new MemberBean();
 
-		mb.setId(userid);
-		mb.setPasword(password);
+		mb.setUserId(userid); // 修正: setId -> setUserId
+		mb.setPassword(password); // 修正: setPasword -> setPassword
 
 		// usersdaoのfindAccountメソッドの呼び出し
 		try {
@@ -63,23 +61,25 @@ public class LoginServlet extends HttpServlet {
 
 			// ログイン処理の成功、失敗によって処理を分岐
 			if (returnmb != null) { // ログイン成功
-				// セッションスコープに社員コードを保存
+				// セッションスコープに社員コードと名前を保存
 				HttpSession session = request.getSession();
 				session.setAttribute("userid", userid);
+				session.setAttribute("name", returnmb.getName()); // 追加: nameをセッションに保存
+
 				// フォワード
 				RequestDispatcher dispatcher = request.getRequestDispatcher("confirmForm.jsp");
 				dispatcher.forward(request, response);
 			} else { // ログイン失敗
 				// 社員IDとパスワードのエラーチェック
-				if (userid == null || userid.isEmpty()) {
-					request.setAttribute("userIdError", "社員IDを入力してください。");
-				}
+//				if (userid == null ) {
+//					request.setAttribute("userIdError", "社員IDを入力してください。");
+//				}
 				if (password == null || password.isEmpty()) {
 					request.setAttribute("passwordError", "パスワードを入力してください。");
 				}
 
 				// 両方が誤っている場合やエラーメッセージを設定する場合
-				if ((userid != null && !userid.isEmpty()) && (password != null && !password.isEmpty())
+				if ((userid != null ) && (password != null && !password.isEmpty())
 						&& returnmb == null) {
 					request.setAttribute("error", "※社員IDまたはパスワードに誤りがあります。");
 				}
@@ -88,12 +88,9 @@ public class LoginServlet extends HttpServlet {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("top.jsp");
 				dispatcher.forward(request, response);
 			}
-		} catch (ClassNotFoundException |
-
-				SQLException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-
 	}
 }

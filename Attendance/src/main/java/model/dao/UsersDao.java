@@ -18,10 +18,10 @@ public class UsersDao {
 		// データベースへ接続
 		try (Connection con = ConnectionManager.getConnection()) {
 
-			String sql = "SELECT user_id,user_password FROM user WHERE user_id = ? AND user_password = ?";
+			String sql = "SELECT user_id, user_password, name FROM user WHERE user_id = ? AND user_password = ?";
 			PreparedStatement ps = con.prepareStatement(sql);
 
-			ps.setString(1, mb.getuserId());
+			ps.setInt(1, mb.getUserId()); // getuserId() → getUserId() に修正
 			ps.setString(2, mb.getPassword());
 
 			ResultSet rs = ps.executeQuery();
@@ -29,10 +29,10 @@ public class UsersDao {
 			if (rs.next()) {
 				returnmb = new MemberBean();
 				// 見つかったアカウント情報を戻り値にセット
-				returnmb.setId(rs.getString("user_id"));
-				returnmb.setPasword(rs.getString("user_password"));
+				returnmb.setUserId(rs.getInt("user_id"));
+				returnmb.setPassword(rs.getString("user_password"));
+				returnmb.setName(rs.getString("name")); // nameをセット
 
-				//}else {//ユーザーが存在しないとき、falseを返す？
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -41,5 +41,4 @@ public class UsersDao {
 
 		return returnmb;
 	}
-
 }
