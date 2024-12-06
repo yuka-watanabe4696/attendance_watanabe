@@ -21,7 +21,6 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	public LogoutServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -32,13 +31,16 @@ public class LogoutServlet extends HttpServlet {
 		// セッションを無効化
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			session.invalidate();
+			session.invalidate(); // セッションを無効化してログアウト
 		}
 
 		// logout.jspへフォワード
 		request.getRequestDispatcher("logout.jsp").forward(request, response);
 	}
 
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);

@@ -34,8 +34,9 @@
 				<%
 				}
 				%>
-				<input type="text" name="userid" id="userid">
-
+				<!-- ユーザーが入力した社員IDを保持 -->
+				<input type="text" name="userid" id="userid"
+					value="<%=request.getParameter("userid") != null ? request.getParameter("userid") : ""%>">
 			</div>
 
 			<!-- パスワード -->
@@ -50,9 +51,10 @@
 				<%
 				}
 				%>
+				<!-- ユーザーが入力したパスワードを保持 -->
 				<input type="password" name="password" id="password">
-
 			</div>
+
 			<!-- ログインボタンの右寄せ -->
 			<div class="submit-container">
 				<input type="submit" value="ログイン">
