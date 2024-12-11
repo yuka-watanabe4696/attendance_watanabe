@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f9;
+}
+
+.message-container {
+	text-align: center;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ログアウトメッセージの文字色を黒に変更 */
+.message-container h1 {
+	color: #000000;
+	/* 黒色 */
+}
+
+.message-container p {
+	color: #000000;
+	/* 黒色 */
+}
+
+.message-container a {
+	display: inline-block;
+	margin-top: 20px;
+	text-decoration: none;
+	color: #fff;
+	background-color: #4CAF50;
+	padding: 10px 20px;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.message-container a:hover {
+	background-color: #45a049;
+}
