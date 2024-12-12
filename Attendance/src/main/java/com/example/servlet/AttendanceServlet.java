@@ -33,8 +33,10 @@ public class AttendanceServlet extends HttpServlet {
 			return;
 		}
 
-		// セッションからユーザーIDを取得
+		// セッションからユーザーIDと名前を取得
 		Object userIdObj = session.getAttribute("userid");
+		String name = (String) session.getAttribute("name");
+
 		if (!(userIdObj instanceof Integer)) {
 			logger.warning("セッションに保存されたユーザーIDが無効です。ログインページにリダイレクトします。");
 			response.sendRedirect("top.jsp");
@@ -43,37 +45,34 @@ public class AttendanceServlet extends HttpServlet {
 		Integer userId = (Integer) userIdObj;
 
 		try {
-
 			// ユーザーIDに基づいて勤怠情報を取得
 			AttendanceDao dao = new AttendanceDao();
 			List<AttendanceBean> attendanceList = dao.getAttendanceList(userId);
 
 			if (attendanceList.isEmpty()) {
-
 				logger.info("ユーザーID " + userId + " の勤怠情報が見つかりませんでした。");
 				request.setAttribute("message", "勤怠情報が見つかりませんでした。");
 			} else {
-
 				logger.info("ユーザーID " + userId + " の勤怠情報を正常に取得しました。");
 				request.setAttribute("attendanceList", attendanceList);
+			}
 
+			// セッションにユーザー名を保存（セッションが切れていた場合の再設定）
+			if (name == null) {
+				name = "ゲスト"; // デフォルトの名前
+				session.setAttribute("name", name);
 			}
 
 			// 勤怠情報を表示するJSPにフォワード
 			request.getRequestDispatcher("attendance.jsp").forward(request, response);
 
 		} catch (SQLException e) {
-			e.printStackTrace(); // スタックトレースを表示
 			logger.log(Level.SEVERE, "データベースエラーが発生しました: ", e);
-			response.setContentType("text/html; charset=UTF-8");
-			response.getWriter().println("データベースエラーが発生しました。管理者に連絡してください。");
-		}
-
-		catch (ClassNotFoundException e) {
+			handleError(response, "データベースエラーが発生しました。管理者に連絡してください。");
+		} catch (ClassNotFoundException e) {
 			logger.log(Level.SEVERE, "システムエラーが発生しました: ", e);
 			handleError(response, "システムエラーが発生しました。管理者に連絡してください。");
 		}
-
 	}
 
 	/**

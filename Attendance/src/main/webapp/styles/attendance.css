@@ -4,9 +4,10 @@ body {
 	display: flex;
 	margin: 0;
 	font-family: Arial, sans-serif;
+	box-sizing: border-box;
+	/* 全要素にボックスサイズを適用 */
 }
 
-/* サイドバーのスタイル */
 .sidebar {
 	width: 250px;
 	background-color: #2c3e50;
@@ -20,6 +21,7 @@ body {
 	flex-direction: column;
 	justify-content: flex-start;
 	height: 100vh;
+	box-sizing: border-box;
 }
 
 .sidebar h2 {
@@ -42,11 +44,19 @@ body {
 	background-color: #1abc9c;
 }
 
-
-
 .main-content {
-	margin-left: 220px;
+	margin-left: 250px;
+	/* サイドバーの幅に一致 */
 	padding: 20px;
+	box-sizing: border-box;
+	width: calc(100% - 250px);
+	/* サイドバーを除いた幅を計算 */
+	min-height: 100vh;
+	/* 高さを画面いっぱいにする */
+	background-color: #f8f9fa;
+	/* 背景色を追加 */
+	overflow-x: auto;
+	/* 横スクロール対応 */
 }
 
 h1 {
@@ -90,4 +100,42 @@ tr:hover {
 	font-size: 18px;
 	color: #d9534f;
 	margin-top: 20px;
+}
+
+/* 合計時間の下にボタンを配置 */
+.month-navigation {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+	position: relative;
+}
+
+/* 先月ボタン: 左下 */
+.prev-month-button {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	padding: 10px 20px;
+	background-color: #4CAF50;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+}
+
+/* 翌月ボタン: 右下 */
+.next-month-button {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	padding: 10px 20px;
+	background-color: #4CAF50;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+}
+
+/* ボタンがホバーされたときのスタイル */
+.prev-month-button:hover,
+.next-month-button:hover {
+	background-color: #45a049;
 }

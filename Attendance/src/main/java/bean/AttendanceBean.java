@@ -1,7 +1,9 @@
 package bean;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class AttendanceBean {
 
@@ -20,8 +22,7 @@ public class AttendanceBean {
 
 	// コンストラクタ
 	public AttendanceBean(int id, LocalDate date, LocalTime attendanceTime, LocalTime breakTime,
-			LocalTime timeToClockOut,
-			double totalHours, String status, int userId) {
+			LocalTime timeToClockOut, double totalHours, String status, int userId) {
 		this.id = id;
 		this.date = date;
 		this.attendanceTime = attendanceTime;
@@ -33,7 +34,6 @@ public class AttendanceBean {
 	}
 
 	// GetterとSetter
-
 	public int getId() {
 		return id;
 	}
@@ -96,6 +96,59 @@ public class AttendanceBean {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	// 日付のフォーマットメソッド
+	public String getFormattedDate() {
+		if (date != null) {
+			return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		return "";
+	}
+
+	// 出勤時間のフォーマットメソッド
+	public String getFormattedStartTime() {
+		if (attendanceTime != null) {
+			return attendanceTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+		}
+		return "";
+	}
+
+	// 休憩時間のフォーマットメソッド
+	public String getFormattedBreakTime() {
+		if (breakTime != null) {
+			return breakTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+		}
+		return "";
+	}
+
+	// 退勤時間のフォーマットメソッド
+	public String getFormattedEndTime() {
+		if (timeToClockOut != null) {
+			return timeToClockOut.format(DateTimeFormatter.ofPattern("HH:mm"));
+		}
+		return "";
+	}
+
+	// 勤務時間を計算して返すメソッド
+	public double getWorkHours() {
+		if (attendanceTime != null && timeToClockOut != null && breakTime != null) {
+			Duration workDuration = Duration.between(attendanceTime, timeToClockOut); // 退勤時間 - 出勤時間
+			Duration breakDuration = Duration.between(LocalTime.MIDNIGHT, breakTime); // 休憩時間
+			long workMinutes = workDuration.toMinutes() - breakDuration.toMinutes(); // 勤務時間から休憩時間を引く
+			return workMinutes / 60.0; // 時間単位で返す
+		}
+		return 0.0; // 出勤時間や退勤時間が設定されていない場合は0
+	}
+
+	// ステータスを返すメソッド
+	public String getStatusString() {
+		if ("Present".equals(status)) {
+			return "出勤";
+		} else if ("Leave".equals(status)) {
+			return "休み";
+		}
+		return status;
 	}
 
 	@Override
