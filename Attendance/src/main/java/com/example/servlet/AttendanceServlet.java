@@ -25,53 +25,49 @@ public class AttendanceServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// セッションを取得
 		HttpSession session = request.getSession(false);
 		if (session == null || session.getAttribute("userid") == null) {
-			logger.warning("セッションが無効、またはユーザーIDが見つかりません。ログインページにリダイレクトします。");
 			response.sendRedirect("top.jsp");
 			return;
 		}
 
-		// セッションからユーザーIDと名前を取得
 		Object userIdObj = session.getAttribute("userid");
-		String name = (String) session.getAttribute("name");
-
 		if (!(userIdObj instanceof Integer)) {
-			logger.warning("セッションに保存されたユーザーIDが無効です。ログインページにリダイレクトします。");
 			response.sendRedirect("top.jsp");
 			return;
 		}
 		Integer userId = (Integer) userIdObj;
 
 		try {
-			// ユーザーIDに基づいて勤怠情報を取得
 			AttendanceDao dao = new AttendanceDao();
-			List<AttendanceBean> attendanceList = dao.getAttendanceList(userId);
 
-			if (attendanceList.isEmpty()) {
-				logger.info("ユーザーID " + userId + " の勤怠情報が見つかりませんでした。");
-				request.setAttribute("message", "勤怠情報が見つかりませんでした。");
-			} else {
-				logger.info("ユーザーID " + userId + " の勤怠情報を正常に取得しました。");
-				request.setAttribute("attendanceList", attendanceList);
+			// 初期表示を2024年9月に設定
+			int year = 2024;
+			int month = 9;
+
+			// attendanceListを取得
+			List<AttendanceBean> attendanceList = dao.getAttendanceListForMonth(userId, year, month);
+
+			// 勤怠情報が取得できた場合に合計勤務時間を計算
+			double totalWorkHours = 0;
+			if (attendanceList != null && !attendanceList.isEmpty()) {
+				for (AttendanceBean attendance : attendanceList) {
+					totalWorkHours += attendance.getWorkHours();
+				}
 			}
 
-			// セッションにユーザー名を保存（セッションが切れていた場合の再設定）
-			if (name == null) {
-				name = "ゲスト"; // デフォルトの名前
-				session.setAttribute("name", name);
-			}
+			// totalWorkHoursをリクエスト属性として設定
+			request.setAttribute("totalWorkHours", totalWorkHours);
 
-			// 勤怠情報を表示するJSPにフォワード
+			// そのままJSPに渡す
+			request.setAttribute("attendanceList", attendanceList);
+			request.setAttribute("currentYear", year);
+			request.setAttribute("currentMonth", month);
+
 			request.getRequestDispatcher("attendance.jsp").forward(request, response);
 
-		} catch (SQLException e) {
-			logger.log(Level.SEVERE, "データベースエラーが発生しました: ", e);
-			handleError(response, "データベースエラーが発生しました。管理者に連絡してください。");
-		} catch (ClassNotFoundException e) {
-			logger.log(Level.SEVERE, "システムエラーが発生しました: ", e);
-			handleError(response, "システムエラーが発生しました。管理者に連絡してください。");
+		} catch (SQLException | ClassNotFoundException e) {
+			handleError(response, "データベースエラーが発生しました。管理者に連絡してください。", e);
 		}
 	}
 
@@ -80,9 +76,11 @@ public class AttendanceServlet extends HttpServlet {
 	 * 
 	 * @param response HttpServletResponse
 	 * @param message  エラーメッセージ
+	 * @param e        例外情報
 	 * @throws IOException
 	 */
-	private void handleError(HttpServletResponse response, String message) throws IOException {
+	private void handleError(HttpServletResponse response, String message, Exception e) throws IOException {
+		logger.log(Level.SEVERE, message, e);
 		response.setContentType("text/html; charset=UTF-8");
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		response.getWriter().println("<html><body><h3>" + message + "</h3></body></html>");

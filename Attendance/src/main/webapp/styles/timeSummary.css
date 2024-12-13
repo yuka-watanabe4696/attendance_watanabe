@@ -1,0 +1,182 @@
+@charset "UTF-8";
+
+body {
+	display: flex;
+	height: 100vh;
+	margin: 0;
+}
+
+.sidebar {
+	width: 250px;
+	background-color: #f4f4f4;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	padding-top: 20px;
+}
+
+.main-content {
+	margin-left: 250px;
+	/* サイドバーの幅を考慮してメインコンテンツの位置を調整 */
+	padding: 20px;
+	flex-grow: 1;
+	overflow: auto;
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 20px;
+	/* 表との間に少しスペースを空ける */
+}
+
+/* 労働時間集計表 */
+#summaryTable {
+	width: 80%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+th,
+td {
+	border: 1px solid #ddd;
+	padding: 10px;
+	text-align: center;
+}
+
+td {
+	background-color: #f9f9f9;
+	vertical-align: top;
+}
+
+tr:nth-child(even) td {
+	background-color: #f2f2f2;
+}
+
+td strong {
+	font-weight: bold;
+}
+
+td#scheduledDays,
+td#workedDays,
+td#holidayWorkDays,
+td#absenceDays,
+td#paidLeaveDays,
+td#scheduledHours,
+td#workedHours,
+td#nightShiftHours,
+td#overtimeHours,
+td#holidayWorkHours {
+	text-align: center;
+}
+
+/* 一覧へ戻るボタン */
+.back-button {
+	position: fixed;
+	/* 固定位置に変更 */
+	top: 20px;
+	left: 300px;
+	/* サイドバーの幅（250px）より少し左に調整 */
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	/* リンクの下線を消す */
+	border-radius: 5px;
+	z-index: 1000;
+	/* 他のコンテンツより前に表示 */
+}
+
+.back-button:hover {
+	background-color: #45a049;
+}
+
+/* 年別・月別ボタン */
+.filter-buttons {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	z-index: 1000;
+}
+
+.filter-button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-right: 10px;
+	/* ボタン間の間隔 */
+}
+
+.filter-button:hover {
+	background-color: #45a049;
+}
+
+/* 年別・月別リスト */
+.filter-list {
+	background-color: white;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	margin-top: 10px;
+	padding: 10px;
+	position: absolute;
+	right: 0;
+	z-index: 1001;
+}
+
+.filter-list ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+.filter-list ul li {
+	padding: 8px;
+}
+
+.filter-list ul li a {
+	color: #333;
+	text-decoration: none;
+	display: block;
+}
+
+.filter-list ul li a:hover {
+	background-color: #f4f4f4;
+}
+
+.vertical-text {
+	display: flex;
+	flex-direction: column;
+	/* 縦に並べる */
+	justify-content: center;
+	/* 縦方向に中央揃え */
+	align-items: center;
+	/* 横方向に中央揃え */
+	height: 100%;
+	/* セルの高さを100%にして、縦方向に伸びる */
+	
+	.extract-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px 10px;
+    cursor: pointer;
+}
+
+.extract-button:hover {
+    background-color: #45a049;
+}
+
+}

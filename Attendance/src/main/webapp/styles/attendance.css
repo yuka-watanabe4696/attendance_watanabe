@@ -2,10 +2,28 @@
 
 body {
 	display: flex;
+	justify-content: flex-start;
+	/* 左寄せに変更 */
 	margin: 0;
+	padding: 0;
 	font-family: Arial, sans-serif;
 	box-sizing: border-box;
-	/* 全要素にボックスサイズを適用 */
+}
+
+.main-content {
+	margin-left: 250px;
+	/* サイドバーの幅分のマージンを設定 */
+	padding: 20px;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: calc(100% - 250px);
+	/* サイドバーを除いた幅 */
+	min-height: 100vh;
+	background-color: #f8f9fa;
+	overflow-x: auto;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .sidebar {
@@ -44,19 +62,8 @@ body {
 	background-color: #1abc9c;
 }
 
-.main-content {
-	margin-left: 250px;
-	/* サイドバーの幅に一致 */
-	padding: 20px;
-	box-sizing: border-box;
-	width: calc(100% - 250px);
-	/* サイドバーを除いた幅を計算 */
-	min-height: 100vh;
-	/* 高さを画面いっぱいにする */
-	background-color: #f8f9fa;
-	/* 背景色を追加 */
-	overflow-x: auto;
-	/* 横スクロール対応 */
+.sidebar a.active {
+	background-color: #16a085;
 }
 
 h1 {
@@ -102,40 +109,155 @@ tr:hover {
 	margin-top: 20px;
 }
 
-/* 合計時間の下にボタンを配置 */
-.month-navigation {
+.button-container {
+	margin-top: 20px;
 	display: flex;
 	justify-content: space-between;
-	margin-top: 20px;
+	/* ボタンを左右に配置 */
+	padding: 0 30px;
+	width: 100%;
+}
+
+.month-button {
+	padding: 10px 20px;
+	font-size: 14px;
+	cursor: pointer;
+	border: 2px solid #007bff;
+	background-color: #007bff;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+	transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s;
+	min-width: 120px;
+	/* ボタンに一定の幅を指定 */
+}
+
+.month-button:hover {
+	background-color: #0056b3;
+	transform: scale(1.05);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.month-button:active {
+	background-color: #003366;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.month-display {
+	text-align: center;
+	margin: 20px 0;
+	font-size: 1.5em;
 	position: relative;
+	/* 必須: 子要素を絶対位置で配置するため */
 }
 
-/* 先月ボタン: 左下 */
-.prev-month-button {
+.time-summary-button {
 	position: absolute;
-	left: 0;
-	bottom: 0;
-	padding: 10px 20px;
-	background-color: #4CAF50;
-	color: white;
-	text-decoration: none;
-	border-radius: 5px;
-}
-
-/* 翌月ボタン: 右下 */
-.next-month-button {
-	position: absolute;
+	top: 0;
+	/* 年月表示の上部に配置 */
 	right: 0;
-	bottom: 0;
-	padding: 10px 20px;
-	background-color: #4CAF50;
-	color: white;
-	text-decoration: none;
-	border-radius: 5px;
+	/* 年月表示の右端に配置 */
+	margin-top: 10px;
+	/* 少し下に配置 */
+	margin-right: 10px;
+	/* 右端に少し余白を持たせる */
 }
 
-/* ボタンがホバーされたときのスタイル */
-.prev-month-button:hover,
-.next-month-button:hover {
-	background-color: #45a049;
+.summary-button {
+	padding: 10px 20px;
+	font-size: 14px;
+	cursor: pointer;
+	border: 2px solid #28a745;
+	background-color: #28a745;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+	transition: background-color 0.3s, transform 0.3s ease-in-out;
+}
+
+.summary-button:hover {
+	background-color: #218838;
+	transform: scale(1.05);
+}
+
+.summary-button:active {
+	background-color: #1e7e34;
+}
+
+.navigation {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.navigation button {
+	margin: 0 10px;
+	padding: 10px 20px;
+	font-size: 1em;
+}
+
+@media screen and (max-width: 768px) {
+
+	/* サイドバーのスタイル */
+	.sidebar {
+		width: 250px;
+		/* サイドバーの幅 */
+		position: fixed;
+		height: 100%;
+		background-color: #f4f4f4;
+		padding: 20px;
+		box-sizing: border-box;
+		top: 0;
+		left: 0;
+	}
+
+	/* メインコンテンツのスタイル */
+	.main-content {
+		margin-left: 250px;
+		/* サイドバーの幅分だけ左にスペースを確保 */
+		padding: 20px;
+		/* タイトルとコンテンツの間に余白を作成 */
+		box-sizing: border-box;
+	}
+
+	/* 「勤怠情報一覧」のタイトルスタイル */
+	.month-display h2 {
+		margin-top: 0;
+		font-size: 24px;
+		font-weight: bold;
+		padding-left: 20px;
+		/* 左に少し余白を作成して、サイドバーから離す */
+	}
+
+	.time-summary-button {
+		position: absolute;
+		top: 0;
+		/* 年月表示の上部に配置 */
+		right: 0;
+		/* 年月表示の右端に配置 */
+		margin-top: 10px;
+		/* 少し下に配置 */
+		margin-right: 10px;
+		/* 右端に少し余白を持たせる */
+	}
+
+	.summary-button {
+		padding: 10px 20px;
+		font-size: 14px;
+		cursor: pointer;
+		border: 2px solid #28a745;
+		background-color: #28a745;
+		color: white;
+		border-radius: 5px;
+		text-align: center;
+		transition: background-color 0.3s, transform 0.3s ease-in-out;
+	}
+
+	.summary-button:hover {
+		background-color: #218838;
+		transform: scale(1.05);
+	}
+
+	.summary-button:active {
+		background-color: #1e7e34;
+	}
 }
